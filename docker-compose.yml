@@ -1,0 +1,18 @@
+version: '3.7'
+
+services:
+  redis:
+    hostname: redis
+    image: redis:6
+    command: redis-server --appendonly yes --requirepass xstateChatbot
+    restart: always
+    ports:
+      - 6381:6379
+    environment:
+      - REDIS_PASSWORD=xstateChatbot
+    volumes:
+      - redis:/data
+
+volumes:
+  redis:
+    driver: local
