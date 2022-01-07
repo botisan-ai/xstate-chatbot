@@ -27,7 +27,7 @@ export class LogicService {
   }
 
   async process(sender: string, event: BotEvent): Promise<void> {
-    const state = await this.storage.fetch(sender);
+    const state = await this.storage.fetch(sender, this.machine.initialState);
     this.service.start(state);
     this.service.send(event);
     this.service.execute(this.service.state);

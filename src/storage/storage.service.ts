@@ -14,19 +14,17 @@ export class StorageService {
   }
 
   public async persist(
-    senderId: string,
+    sender: string,
     value: State<any, any, any, any>,
   ): Promise<void> {
-    await this.client.set(
-      `${PREFIX}:${senderId}`,
-      JSON.stringify(value.toJSON()),
-    );
+    await this.client.set(`${PREFIX}:${sender}`, JSON.stringify(value));
   }
 
   public async fetch(
-    senderId: string,
+    sender: string,
+    defaultState?: State<any, any, any, any>,
   ): Promise<State<any, any, any, any> | undefined> {
-    const state = await this.client.get(`${PREFIX}:${senderId}`);
-    return state ? State.create(JSON.parse(state)) : undefined;
+    const state = await this.client.get(`${PREFIX}:${sender}`);
+    return state ? State.create(JSON.parse(state)) : defaultState;
   }
 }
