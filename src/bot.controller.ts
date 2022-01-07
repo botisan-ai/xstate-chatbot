@@ -1,5 +1,5 @@
 import { Body, Controller, Post, Scope } from '@nestjs/common';
-import { from, Observable } from 'rxjs';
+import { Observable } from 'rxjs';
 import { reduce } from 'rxjs/operators';
 
 import { LogicService, ChannelService } from './logic';
