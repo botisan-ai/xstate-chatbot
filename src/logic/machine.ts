@@ -3,10 +3,18 @@ import { MachineConfig, MachineOptions } from 'xstate';
 
 import { ChannelService } from './channel.service';
 
-export type BotEvent =
-  | { type: 'unknown' }
-  | { type: 'greet' }
-  | { type: 'file_uploaded'; file_url: string };
+export type UnknownEvent = { type: 'unknown' };
+
+export type GreetEvent = {
+  type: 'greet';
+  welcome_code: string;
+  scene: string;
+  scene_param?: string;
+};
+
+export type FileUploadedEvent = { type: 'file_uploaded'; file_url: string };
+
+export type BotEvent = UnknownEvent | GreetEvent | FileUploadedEvent;
 
 export interface BotContext {
   sender_id: string;
@@ -42,17 +50,20 @@ export const machineOptionsProvider: Provider<
   useFactory: (channel: ChannelService) => {
     return {
       actions: {
-        utter_introduction: (context: BotContext, event: BotEvent) => {
+        utter_introduction: (context: BotContext, event: GreetEvent) => {
           channel.next({
             text: 'Hello!',
+            custom: {
+              welcome_code: event.welcome_code,
+            },
           });
         },
-        utter_uploaded: (context: BotContext, event: BotEvent) => {
+        utter_uploaded: (context: BotContext, event: FileUploadedEvent) => {
           channel.next({
             text: 'File uploaded!',
           });
         },
-        utter_ask_rephrase: (context: BotContext, event: BotEvent) => {
+        utter_ask_rephrase: (context: BotContext, event: UnknownEvent) => {
           channel.next({
             text: "Sorry, I didn't understand that. Could you say that again?",
           });

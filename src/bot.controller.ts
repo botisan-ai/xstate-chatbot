@@ -1,4 +1,4 @@
-import { Body, Controller, Post, Scope } from '@nestjs/common';
+import { Body, Controller, Logger, Post, Scope } from '@nestjs/common';
 import { Observable } from 'rxjs';
 import { reduce } from 'rxjs/operators';
 
@@ -10,6 +10,8 @@ import { MessageInput, ResponsePayload } from './models';
   scope: Scope.REQUEST,
 })
 export class BotController {
+  private logger = new Logger(BotController.name);
+
   constructor(
     private readonly logicService: LogicService,
     private readonly parser: ParserService,
@@ -20,6 +22,7 @@ export class BotController {
   processMessage(
     @Body() { sender, message }: MessageInput,
   ): Observable<ResponsePayload[]> {
+    this.logger.debug(JSON.stringify({ sender, message }));
     this.logicService.process(sender, this.parser.parseMessage(message));
     return this.channel.pipe(
       reduce(
