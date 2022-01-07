@@ -14,7 +14,7 @@ export default registerAs(
       config: [
         {
           namespace: 'tracker',
-          db: 0,
+          db: Number(process.env.REDIS_TRACKER_DB || 0),
         },
       ],
     } as RedisModuleOptions),
