@@ -29,8 +29,13 @@ export class LogicService {
   async process(sender: string, event: BotEvent): Promise<void> {
     const state = await this.storage.fetch(sender, this.machine.initialState);
     this.service.start(state);
+
+    // execute only the actions after starting
+    this.service.onTransition((state) => {
+      this.storage.persist(sender, state);
+      this.service.execute(state);
+    });
+
     this.service.send(event);
-    this.service.execute(this.service.state);
-    return this.storage.persist(sender, this.service.state);
   }
 }
