@@ -20,6 +20,9 @@ export class StorageService {
   ): Promise<void> {
     await this.client.xadd(
       `${PREFIX}:${sender}`,
+      'MAXLEN',
+      '~',
+      100,
       '*',
       'state',
       JSON.stringify(value),
