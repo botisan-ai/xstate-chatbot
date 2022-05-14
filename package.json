@@ -1,8 +1,8 @@
 {
   "name": "xstate-chatbot",
-  "version": "0.1.0",
-  "description": "",
-  "author": "",
+  "version": "0.2.0",
+  "description": "A chatbot built with xstate",
+  "author": "Simon Liang <simon@x-tech.io>",
   "private": false,
   "license": "MIT",
   "scripts": {
@@ -22,23 +22,23 @@
     "test:e2e": "jest --config ./test/jest-e2e.json"
   },
   "dependencies": {
-    "@liaoliaots/nestjs-redis": "^5.2.0",
+    "@liaoliaots/nestjs-redis": "^8.1.1",
     "@nestjs/common": "^8.0.0",
     "@nestjs/config": "^1.1.6",
     "@nestjs/core": "^8.0.0",
     "@nestjs/platform-express": "^8.0.0",
-    "ioredis": "^4.28.2",
+    "ioredis": "^5.0.4",
     "reflect-metadata": "^0.1.13",
     "rimraf": "^3.0.2",
     "rxjs": "^7.2.0",
-    "xstate": "^4.27.0"
+    "xstate": "^4.32.1"
   },
   "devDependencies": {
     "@nestjs/cli": "^8.0.0",
     "@nestjs/schematics": "^8.0.0",
     "@nestjs/testing": "^8.0.0",
     "@types/express": "^4.17.13",
-    "@types/ioredis": "^4.28.7",
+    "@types/ioredis": "^4.28.10",
     "@types/node": "^16.0.0",
     "@typescript-eslint/eslint-plugin": "^5.0.0",
     "@typescript-eslint/parser": "^5.0.0",

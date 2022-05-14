@@ -1,10 +1,14 @@
-import { RedisModule } from '@liaoliaots/nestjs-redis';
+import { DynamicModule } from '@nestjs/common';
 import { ConfigService } from '@nestjs/config';
+import { RedisModule } from '@liaoliaots/nestjs-redis';
 
-import { Module as ConfigModule } from './config.module';
+import { ConfigModule } from 'src/modules';
 
-export const Module = RedisModule.forRootAsync({
-  imports: [ConfigModule],
-  useFactory: (configService: ConfigService) => configService.get('redis'),
-  inject: [ConfigService],
-});
+export const Module: DynamicModule = RedisModule.forRootAsync(
+  {
+    imports: [ConfigModule],
+    useFactory: (configService: ConfigService) => configService.get('redis'),
+    inject: [ConfigService],
+  },
+  false,
+);

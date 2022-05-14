@@ -3,23 +3,24 @@ import { RedisService } from '@liaoliaots/nestjs-redis';
 import { Redis } from 'ioredis';
 import { State } from 'xstate';
 
-const PREFIX = 'state';
+const PREFIX = 'botState';
 
 @Injectable()
-export class StorageService {
-  private logger = new Logger(StorageService.name);
+export class TrackerService {
+  private logger = new Logger(TrackerService.name);
   private client: Redis;
 
   constructor(private readonly redisService: RedisService) {
-    this.client = this.redisService.getClient('tracker');
+    this.client = this.redisService.getClient();
   }
 
   public async persist(
+    namespace: string,
     sender: string,
-    value: State<any, any, any, any>,
+    value: State<any, any, any, any, any>,
   ): Promise<void> {
     await this.client.xadd(
-      `${PREFIX}:${sender}`,
+      `${PREFIX}:${namespace}:${sender}`,
       'MAXLEN',
       '~',
       100,
@@ -30,13 +31,14 @@ export class StorageService {
   }
 
   public async fetch(
+    namespace: string,
     sender: string,
-    defaultState?: State<any, any, any, any>,
-  ): Promise<State<any, any, any, any> | undefined> {
-    const item = await this.client.xrange(
-      `${PREFIX}:${sender}`,
-      '-',
+    defaultState?: State<any, any, any, any, any>,
+  ): Promise<State<any, any, any, any, any> | undefined> {
+    const item = await this.client.xrevrange(
+      `${PREFIX}:${namespace}:${sender}`,
       '+',
+      '-',
       'COUNT',
       1,
     );
@@ -47,10 +49,11 @@ export class StorageService {
 
     const [, state] = item[0][1];
     try {
-      return state ? State.create(JSON.parse(state)) : defaultState;
+      const stateJson = JSON.parse(state);
+      stateJson.actions = [];
+      return state ? State.create(stateJson) : defaultState;
     } catch (err) {
-      this.logger.error(`error getting state: ${err.message}`);
-      console.error(err);
+      this.logger.error(`error getting state: ${err.message}`, err);
       return defaultState;
     }
   }

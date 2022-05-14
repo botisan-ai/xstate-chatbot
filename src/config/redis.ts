@@ -5,17 +5,13 @@ export default registerAs(
   'redis',
   () =>
     ({
+      readyLog: true,
       closeClient: true,
-      commonOptions: {
+      config: {
         host: process.env.REDIS_HOST || 'localhost',
         port: Number(process.env.REDIS_PORT || 6379),
-        password: process.env.REDIS_PASSWORD,
+        password: process.env.REDIS_PASSWORD || 'chatOperator',
+        db: Number(process.env.REDIS_DB || 0),
       },
-      config: [
-        {
-          namespace: 'tracker',
-          db: Number(process.env.REDIS_TRACKER_DB || 0),
-        },
-      ],
     } as RedisModuleOptions),
 );

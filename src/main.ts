@@ -2,7 +2,7 @@ import { Logger } from '@nestjs/common';
 import { NestFactory } from '@nestjs/core';
 import { ConfigService } from '@nestjs/config';
 
-import { BotModule } from './bot.module';
+import { BotModule } from './bot';
 
 async function bootstrap() {
   const logger = new Logger('Main');

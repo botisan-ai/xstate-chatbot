@@ -1,12 +1,10 @@
 import { Injectable, Logger } from '@nestjs/common';
 
-import { BotEvent } from './machine';
-
 @Injectable()
 export class ParserService {
   private logger = new Logger(ParserService.name);
 
-  public parseMessage(message: string): BotEvent {
+  public parseMessage(message: string): any {
     const matches = message.match(/^\/([^{]+)(\{.+\}$)?/);
     if (!matches) {
       return { type: 'unknown' };
